@@ -1,0 +1,125 @@
+openapi: 3.0.3
+info:
+  title: Create human support escalation
+  version: 1.0.0
+  description: Fictional AeroNova airline demo; no real passenger or financial data.
+servers:
+- url: https://grateful-lemming-clearly.ngrok-free.app
+  description: Replace URL with public HTTPS tunnel/deployment reachable by Google
+paths:
+  /api/cases/escalate:
+    post:
+      tags:
+      - AeroNova Demo
+      summary: Open a human support case for an unresolved airline disruption
+      description: Create a fictional human support case if no alternatives are available, the passenger requests
+        human support, or an unsupported exception needs review. Never promise response time. Duplicate open
+        case requests return the existing case.
+      operationId: escalate_case
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - bookingRef
+              - reason
+              - summary
+              properties:
+                bookingRef:
+                  type: string
+                  example: AV9000
+                reason:
+                  type: string
+                  enum:
+                  - no_alternatives
+                  - customer_requested
+                  - exception
+                  description: Select the reason that matches the passenger request.
+                summary:
+                  type: string
+                  minLength: 12
+                  maxLength: 400
+                  description: Brief factual issue summary for the human team.
+      responses:
+        '200':
+          description: Escalation case created or already open
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  case:
+                    type: object
+                    properties:
+                      caseId:
+                        type: string
+                      bookingRef:
+                        type: string
+                      reason:
+                        type: string
+                      summary:
+                        type: string
+                      queue:
+                        type: string
+                      status:
+                        type: string
+        '400':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '404':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '409':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '422':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string

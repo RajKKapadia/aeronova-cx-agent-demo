@@ -1,0 +1,153 @@
+openapi: 3.0.3
+info:
+  title: Confirm passenger rebooking
+  version: 1.0.0
+  description: Fictional AeroNova airline demo; no real passenger or financial data.
+servers:
+- url: https://grateful-lemming-clearly.ngrok-free.app
+  description: Replace URL with public HTTPS tunnel/deployment reachable by Google
+paths:
+  /api/bookings/{bookingRef}/rebook:
+    post:
+      tags:
+      - AeroNova Demo
+      summary: Change the passenger booking to a selected alternative
+      description: HIGH IMPACT MUTATION. Call ONLY after the passenger explicitly confirms the exact alternative
+        flight. Backend validates inventory and permits only one change for the demo. confirmed=true means
+        the agent has received explicit user consent; this is not production-grade proof of authorization.
+      operationId: rebook_flight
+      parameters:
+      - name: bookingRef
+        in: path
+        required: true
+        description: Fictional airline booking reference, e.g. AV2048.
+        schema:
+          type: string
+          example: AV2048
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - flightId
+              - confirmed
+              properties:
+                flightId:
+                  type: string
+                  description: Exact offered flight ID selected by the passenger.
+                  example: AV418
+                confirmed:
+                  type: boolean
+                  description: Set true only after user explicitly confirms the exact proposed flight.
+                  example: true
+      responses:
+        '200':
+          description: Booking rebooked successfully or previously rebooked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  bookingRef:
+                    type: string
+                  confirmationCode:
+                    type: string
+                  newFlight:
+                    type: object
+                    properties:
+                      flightId:
+                        type: string
+                        example: AV418
+                      origin:
+                        type: string
+                        example: BOM
+                      destination:
+                        type: string
+                        example: DEL
+                      date:
+                        type: string
+                        format: date
+                        example: '2026-12-15'
+                      scheduledDeparture:
+                        type: string
+                        example: '11:15'
+                        description: Local airport time HH:mm
+                      estimatedDeparture:
+                        type: string
+                        nullable: true
+                        example: '11:15'
+                      delayMinutes:
+                        type: integer
+                        nullable: true
+                        example: 0
+                      status:
+                        type: string
+                        enum:
+                        - on_time
+                        - delayed
+                        - cancelled
+                      availableSeats:
+                        type: integer
+                        example: 1
+                  remainingSeats:
+                    type: integer
+        '400':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '404':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '409':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '422':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string

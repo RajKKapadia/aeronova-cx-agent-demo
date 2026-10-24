@@ -1,0 +1,124 @@
+openapi: 3.0.3
+info:
+  title: Issue eligible meal voucher
+  version: 1.0.0
+  description: Fictional AeroNova airline demo; no real passenger or financial data.
+servers:
+- url: https://grateful-lemming-clearly.ngrok-free.app
+  description: Replace URL with public HTTPS tunnel/deployment reachable by Google
+paths:
+  /api/care/vouchers:
+    post:
+      tags:
+      - AeroNova Demo
+      summary: Issue a one-time INR 800 meal voucher to a disrupted booking
+      description: HIGH IMPACT MUTATION. First call get_care_eligibility. Ask passenger for explicit approval
+        before calling. Backend enforces eligibility and prevents duplicate issuance.
+      operationId: issue_meal_voucher
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - bookingRef
+              - type
+              - confirmed
+              properties:
+                bookingRef:
+                  type: string
+                  example: AV2048
+                type:
+                  type: string
+                  enum:
+                  - meal
+                  description: Only meal voucher is supported.
+                confirmed:
+                  type: boolean
+                  description: True ONLY after passenger explicitly asks to issue this voucher.
+                  example: true
+      responses:
+        '200':
+          description: Voucher issued or previously issued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                    - issued
+                    - already_issued
+                  voucher:
+                    type: object
+                    properties:
+                      voucherCode:
+                        type: string
+                      bookingRef:
+                        type: string
+                      type:
+                        type: string
+                      amount:
+                        type: integer
+                      currency:
+                        type: string
+                      status:
+                        type: string
+        '400':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '404':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '409':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '422':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string

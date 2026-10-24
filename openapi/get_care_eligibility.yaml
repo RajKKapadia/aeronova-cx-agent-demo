@@ -1,0 +1,111 @@
+openapi: 3.0.3
+info:
+  title: Check meal-voucher eligibility
+  version: 1.0.0
+  description: Fictional AeroNova airline demo; no real passenger or financial data.
+servers:
+- url: https://grateful-lemming-clearly.ngrok-free.app
+  description: Replace URL with public HTTPS tunnel/deployment reachable by Google
+paths:
+  /api/care/eligibility/{bookingRef}:
+    get:
+      tags:
+      - AeroNova Demo
+      summary: Evaluate eligibility based on original flight disruption
+      description: 'Read-only eligibility for fictional AeroNova policy: one INR 800 meal voucher if original
+        flight was cancelled or delayed 180+ minutes. Results stay valid after rebooking.'
+      operationId: get_care_eligibility
+      parameters:
+      - name: bookingRef
+        in: path
+        required: true
+        description: Fictional airline booking reference, e.g. AV2048.
+        schema:
+          type: string
+          example: AV2048
+      responses:
+        '200':
+          description: Fictional assistance policy decision
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bookingRef:
+                    type: string
+                  originalFlightId:
+                    type: string
+                  disruption:
+                    type: string
+                  delayMinutes:
+                    type: integer
+                    nullable: true
+                  policy:
+                    type: string
+                  mealVoucher:
+                    type: object
+                    properties:
+                      eligible:
+                        type: boolean
+                      alreadyIssued:
+                        type: boolean
+                      currency:
+                        type: string
+                      amount:
+                        type: integer
+        '400':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '404':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '409':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string
+        '422':
+          description: Error, response body contains error.code and error.message.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                      message:
+                        type: string

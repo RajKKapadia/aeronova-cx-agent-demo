@@ -1,0 +1,11 @@
+{
+  "name": "aeronova-cx-agent-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/server.ts",
+    "start": "bun src/server.ts",
+    "test": "node --test tests/backend.test.mjs"
+  }
+}
